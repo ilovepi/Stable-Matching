@@ -10,7 +10,7 @@ Person::Person(size_t n, size_t id) : engaged(false), betrothed(-1), id(id)
 Person::~Person(){}
 
 
-void Person::initalize_preference( int n)
+void Person::initalize_preference(size_t n)
 {
 	for (int i = 0; i < n; ++i)
 		preference.push_back(i);

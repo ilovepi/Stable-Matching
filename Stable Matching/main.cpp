@@ -5,13 +5,12 @@
 
 int main()
 {
-	StableMatching sm(10000);
-	std::chrono::high_resolution_clock clock;
-	auto time = clock.now();
+	StableMatching sm(1000);	
+	auto time = std::chrono::high_resolution_clock::now();
 
 	sm.findMatching();
 
-	auto elapsed = clock.now() - time;
+	auto elapsed = std::chrono::high_resolution_clock::now() - time;
 	auto v = sm.get_men();
 	/*
 	for (size_t i = 0; i < v.size(); ++i)

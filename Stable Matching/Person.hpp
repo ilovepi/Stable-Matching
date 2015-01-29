@@ -13,13 +13,13 @@ class Person
 
 public:
 	bool engaged;
-	int betrothed;
-	int id;	
+	size_t betrothed;
+	size_t id;	
 	std::vector<int> preference;	
 
 	Person(size_t n, size_t id);
 	virtual ~Person();
-	void initalize_preference(int n);
+	void initalize_preference(size_t n);
 
 };
 
