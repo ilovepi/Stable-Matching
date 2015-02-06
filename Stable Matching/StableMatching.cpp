@@ -48,21 +48,24 @@ bool StableMatching::findMatching()
 
 bool StableMatching::propose(size_t man, size_t woman)
 {
-	Woman* w = &women[woman];
-	Man* m = &orig_men[man];
+	auto find_woman = [woman](const Woman& w){ return w.id == woman;  };
+	auto find_man = [man](const Man& m){ return m.id == man;  };
+	auto w = std::find_if(women.begin(), women.end(), find_woman);
+	auto m = std::find_if(orig_men.begin(), orig_men.end(), find_man);	
 	if (w->engaged)
 	{
 		if (w->preference[man] < w->preference[w->betrothed])
 		{
-			orig_men[w->betrothed].engaged = false;
-			men.push_back(orig_men[w->betrothed]);
+			auto find_betrothed = [w](const Man& m){ return m.id == w->betrothed;  };
+			auto it = std::find_if(orig_men.begin(), orig_men.end(), find_betrothed);
+			it->engaged = false;;
+			men.push_back(*it);
 		}
 		else
 		{
 			return false;
 		}
-	}
-	
+	}	
 	m->engaged = w->engaged = true;
 	m->betrothed = woman;
 	w->betrothed = man;
@@ -108,14 +111,15 @@ bool StableMatching::isStable(std::vector<std::pair<size_t, size_t>> aMatching, 
 		}
 
 		// see if any woman that a man would prefer would also prefer her to her betrothed
-		for (int j = 0; i < men[i].preference.size(); ++j)
+		for (int j = 0; j < men[i].preference.size(); ++j)
 		{	
 			// if the betrothed is the best, then stop
 			if (betrothed_rank <= j)
 				break;
-
-			auto w = women[men[i].preference[j]]; // a woman that the man preferes
-			if (w.betrothed > w.preference[i])
+			auto wid = men[i].preference[j];
+			auto fem_it = std::find_if(women.begin(), women.end(), [wid](const Woman& w){return wid == w.id; });
+			
+			if (fem_it->preference[fem_it->betrothed] > fem_it->preference[men[i].id])
 				return false;
 		}
 	}
